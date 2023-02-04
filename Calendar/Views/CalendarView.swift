@@ -99,7 +99,7 @@ struct CalendarView: View {
             try viewContext.save()
             print(message)
         } catch {
-            print("failed to save context")
+            print("❌ failed to save context")
         }
     }
 }
