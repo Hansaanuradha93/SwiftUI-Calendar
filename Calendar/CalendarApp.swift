@@ -13,8 +13,15 @@ struct CalendarApp: App {
 
     var body: some Scene {
         WindowGroup {
-            CalendarView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            TabView {
+                CalendarView()
+                    .tabItem { Label("Calendar", systemImage: "calendar") }
+                
+                StreakView()
+                    .tabItem { Label("Streakss", systemImage: "swift") }
+            }
+            .environment(\.managedObjectContext, persistenceController.container.viewContext)
+
         }
     }
 }
