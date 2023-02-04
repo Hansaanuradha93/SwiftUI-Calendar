@@ -37,7 +37,7 @@ struct PersistenceController {
             try viewContext.save()
         } catch {
             let nsError = error as NSError
-            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            fatalError("❌ Unresolved error \(nsError), \(nsError.userInfo)")
         }
         
         return result
@@ -59,7 +59,7 @@ struct PersistenceController {
         
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
+                fatalError("❌ Unresolved error \(error), \(error.userInfo)")
             }
         })
         
@@ -85,14 +85,14 @@ struct PersistenceController {
             let _ = try coordinator.migratePersistentStore(oldStore, to: sharedStoreURL, type: .sqlite)
             print("✈️ migrated to shared store from old store")
         } catch {
-            fatalError("Unable to migrate to shared store")
+            fatalError("❌ Unable to migrate to shared store")
         }
         
         do {
             try FileManager.default.removeItem(at: oldStoreURL)
             print("🚮 deleted old store")
         } catch {
-            print("Unable to delete the old store")
+            print("❌ Unable to delete the old store")
         }
     }
 }
