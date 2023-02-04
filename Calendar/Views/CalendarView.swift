@@ -52,9 +52,19 @@ struct CalendarView: View {
                                 .background(
                                     Circle()
                                         .foregroundColor(.orange.opacity(day.didStudy ? 0.3 : 0.0)))
+                                .onTapGesture {
+                                    if day.date!.dayInt <= Date().dayInt {
+                                        day.didStudy.toggle()
+                                        
+                                        let didStudy = day.didStudy ? "studied" : "not studied"
+                                        let successMessage = "👆🏻 \(day.date!.monthFullName) \(day.date!.dayInt) is now \(didStudy)"
+                                        
+                                        saveToCoreData(with: successMessage)
+                                    } else {
+                                        print("Can't study in the future date!")
+                                    }
+                                }
                         }
-                        
-                        
                     }
                 }
                 
@@ -79,16 +89,20 @@ struct CalendarView: View {
             newDay.date = Calendar.current.date(byAdding: .day, value: dayOffset, to: date.startOfMonth )
             newDay.didStudy = false
         }
+        let successMessage = "✅ \(date.monthFullName) days created"
         
+        saveToCoreData(with: successMessage)
+    }
+    
+    func saveToCoreData(with message: String) {
         do {
             try viewContext.save()
-            print("✅ \(date.monthFullName) days created")
+            print(message)
         } catch {
             print("failed to save context")
         }
     }
 }
-
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
