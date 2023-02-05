@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreData
+import WidgetKit
 
 struct CalendarView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -19,19 +20,10 @@ struct CalendarView: View {
     
     private var days: FetchedResults<Day>
     
-    private let daysOfWeek = ["S", "M", "T", "W", "T", "F", "S"]
-
     var body: some View {
         NavigationView {
             VStack {
-                HStack {
-                    ForEach(daysOfWeek, id: \.self) { daysOfWeek in
-                        Text(daysOfWeek)
-                            .fontWeight(.bold)
-                            .foregroundColor(.orange)
-                            .frame(maxWidth: .infinity)
-                    }
-                }
+                CalendarHeaderView()
                 
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7)) {
                     ForEach(days) { day in
@@ -59,7 +51,9 @@ struct CalendarView: View {
                                         let didStudy = day.didStudy ? "studied" : "not studied"
                                         let successMessage = "👆🏻 \(day.date!.monthFullName) \(day.date!.dayInt) is now \(didStudy)"
                                         
-                                        saveToCoreData(with: successMessage)
+                                        saveToCoreData(with: successMessage) {
+                                            WidgetCenter.shared.reloadTimelines(ofKind: "CalWidget")
+                                        }
                                     } else {
                                         print("Can't study in the future date!")
                                     }
@@ -94,7 +88,7 @@ struct CalendarView: View {
         saveToCoreData(with: successMessage)
     }
     
-    func saveToCoreData(with message: String) {
+    func saveToCoreData(with message: String, action: (() -> Void)? = nil) {
         do {
             try viewContext.save()
             print(message)
