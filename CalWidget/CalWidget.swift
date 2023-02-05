@@ -102,18 +102,6 @@ struct CalWidgetEntryView : View {
                                         .foregroundColor(.orange.opacity(day.didStudy ? 0.3 : 0.0))
                                         .scaleEffect(1.5)
                                 )
-                                .onTapGesture {
-                                    if day.date!.dayInt <= Date().dayInt {
-                                        day.didStudy.toggle()
-
-//                                        let didStudy = day.didStudy ? "studied" : "not studied"
-//                                        let successMessage = "👆🏻 \(day.date!.monthFullName) \(day.date!.dayInt) is now \(didStudy)"
-
-//                                        saveToCoreData(with: successMessage)
-                                    } else {
-                                        print("Can't study in the future date!")
-                                    }
-                                }
                         }
                     }
                 }
