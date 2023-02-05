@@ -59,49 +59,54 @@ struct CalWidgetEntryView : View {
     var entry: Provider.Entry
 
     private let columns = Array(repeating: GridItem(.flexible()), count: 7)
-    @State var streakValue = 0
+    @State private var streakValue = 0
 
     var body: some View {
         
         HStack {
-            VStack {
-                Text("\(streakValue)")
-                    .font(.system(size: 70, weight: .bold, design: .rounded))
-                    .foregroundColor(streakValue > 0 ? .orange : .pink)
-                Text("Current Streak")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+            
+            Link(destination: URL(string: "streak")!) {
+                VStack {
+                    Text("\(streakValue)")
+                        .font(.system(size: 70, weight: .bold, design: .rounded))
+                        .foregroundColor(streakValue > 0 ? .orange : .pink)
+                    Text("Current Streak")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
             }
             
-            VStack {
-                
-                CalendarHeaderView(font: .caption)
-                
-                LazyVGrid(columns: columns, spacing: 7) {
-                    ForEach(entry.days) { day in
+            Link(destination: URL(string: "calendar")!) {
+                VStack {
+                    
+                    CalendarHeaderView(font: .caption)
+                    
+                    LazyVGrid(columns: columns, spacing: 7) {
+                        ForEach(entry.days) { day in
 
-                        if day.date?.monthInt != Date().monthInt { // not in the current month
-                            Text(day.date!.formatted(.dateTime.day()))
-                                .font(.caption)
-                                .bold()
-                                .foregroundColor(day.didStudy ? .orange.opacity(0.3) : .secondary.opacity(0.3))
-                                .frame(maxWidth: .infinity)
-                                .background(
-                                    Circle()
-                                        .foregroundColor(.orange.opacity(day.didStudy ? 0.3 : 0.0))
-                                        .scaleEffect(1.5)
-                                )
-                        } else {
-                            Text(day.date!.formatted(.dateTime.day()))
-                                .font(.caption)
-                                .bold()
-                                .foregroundColor(day.didStudy ? .orange : .secondary)
-                                .frame(maxWidth: .infinity)
-                                .background(
-                                    Circle()
-                                        .foregroundColor(.orange.opacity(day.didStudy ? 0.3 : 0.0))
-                                        .scaleEffect(1.5)
-                                )
+                            if day.date?.monthInt != Date().monthInt { // not in the current month
+                                Text(day.date!.formatted(.dateTime.day()))
+                                    .font(.caption)
+                                    .bold()
+                                    .foregroundColor(day.didStudy ? .orange.opacity(0.3) : .secondary.opacity(0.3))
+                                    .frame(maxWidth: .infinity)
+                                    .background(
+                                        Circle()
+                                            .foregroundColor(.orange.opacity(day.didStudy ? 0.3 : 0.0))
+                                            .scaleEffect(1.5)
+                                    )
+                            } else {
+                                Text(day.date!.formatted(.dateTime.day()))
+                                    .font(.caption)
+                                    .bold()
+                                    .foregroundColor(day.didStudy ? .orange : .secondary)
+                                    .frame(maxWidth: .infinity)
+                                    .background(
+                                        Circle()
+                                            .foregroundColor(.orange.opacity(day.didStudy ? 0.3 : 0.0))
+                                            .scaleEffect(1.5)
+                                    )
+                            }
                         }
                     }
                 }
